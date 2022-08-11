@@ -11,6 +11,7 @@ import { DepProvider } from './shared/context/context.dep';
 import configureStore from './apps/store';
 import { Provider } from 'react-redux';
 import Loginview from './pages/login/loginView';
+import RegisterView from './pages/register/registerView';
 
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
@@ -23,7 +24,8 @@ root.render(
     <Provider store={store}>
       <DepProvider service={service}>
         {/* <App /> */}
-        <Loginview />
+        {/* <Loginview /> */}
+        <RegisterView />
       </DepProvider>
     </Provider>
   </React.StrictMode>

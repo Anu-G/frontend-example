@@ -4,13 +4,24 @@ const authService = ({ doPost, doGet }) => {
          return await doPost({
             url: '/auth/login',
             data: userCredential
-         })
+         });
       } catch (err) {
          throw err;
       }
    }
 
-   return { doLogin };
+   const doRegister = async (userData) => {
+      try {
+         return await doPost({
+            url: '/auth/register',
+            data: userData
+         });
+      } catch (err) {
+         throw err;
+      }
+   }
+
+   return { doLogin, doRegister };
 }
 
 export default authService;

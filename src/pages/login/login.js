@@ -1,7 +1,8 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux"
 import { useDep } from "../../shared/context/context.dep";
 import { authSelector } from "../../shared/selectors/selector.auth";
+import { inputLenValidator } from "../../utils/util.validation";
 import { userLoginAction } from "./state/auth.action";
 
 const Login = _ => {
@@ -13,11 +14,15 @@ const Login = _ => {
       userName: '',
       userPassword: ''
    });
+   const [formErr, setFormErr] = useState({
+      userNameErr: '',
+      userPasswordErr: ''
+   })
    const [isLoading, setLoading] = useState(false);
    const [errMsg, setErrMsg] = useState('');
 
-   // const isFirstRender = React.useRef(true);
-   // React.useEffect(() => {
+   // const isFirstRender = useRef(true);
+   // useEffect(() => {
    //    if (isFirstRender.current) {
    //       isFirstRender.current = false;
    //       return;
@@ -30,6 +35,32 @@ const Login = _ => {
          setErrMsg('');
       }
    }, [errMsg]);
+
+   useEffect(_ => {
+      if (!inputLenValidator(userCredential.userPassword, 6) && userCredential.userPassword !== '') {
+         setFormErr(prevState => ({
+            ...prevState,
+            userPasswordErr: 'password at least 6 characters!'
+         }));
+      } else {
+         setFormErr(prevState => ({
+            ...prevState,
+            userPasswordErr: ''
+         }));
+      }
+
+      if (!inputLenValidator(userCredential.userName, 6) && userCredential.userName !== '') {
+         setFormErr(prevState => ({
+            ...prevState,
+            userNameErr: 'username at least 6 characters!'
+         }));
+      } else {
+         setFormErr(prevState => ({
+            ...prevState,
+            userNameErr: ''
+         }));
+      }
+   }, [userCredential.userPassword, userCredential.userName])
 
    const onChange = (key, val) => {
       setUserCredential(prevState => ({
@@ -59,10 +90,12 @@ const Login = _ => {
 
    return ({
       userName: userCredential.userName,
-      onChange: onChange,
       userPassword: userCredential.userPassword,
-      onSubmit: onSubmit,
-      isLoading: isLoading
+      passErr: formErr.userPasswordErr,
+      userErr: formErr.userNameErr,
+      onChange,
+      onSubmit,
+      isLoading
    })
 }
 
