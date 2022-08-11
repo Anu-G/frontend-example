@@ -6,7 +6,7 @@
 .tooltip-area .tooltiptext {
    visibility: visible;
    width: auto;
-   background-color: rgba(0, 0, 0, 0.7);
+   background-color: #dc3545;
    color: #fff;
    text-align: center;
    border-radius: 6px;
@@ -21,7 +21,7 @@
 .tooltip-area .buttontip {
    visibility: hidden;
    width: auto;
-   background-color: rgba(0, 0, 0, 0.6);
+   background-color: #dc3545  ;
    color: #fff;
    text-align: center;
    border-radius: 6px;

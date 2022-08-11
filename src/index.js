@@ -12,6 +12,8 @@ import configureStore from './apps/store';
 import { Provider } from 'react-redux';
 import Loginview from './pages/login/loginView';
 import RegisterView from './pages/register/registerView';
+import { BrowserRouter } from 'react-router-dom';
+import AppRouter from './apps/router';
 
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
@@ -21,13 +23,16 @@ const store = configureStore();
 
 root.render(
   <React.StrictMode>
-    <Provider store={store}>
-      <DepProvider service={service}>
-        {/* <App /> */}
-        {/* <Loginview /> */}
-        <RegisterView />
-      </DepProvider>
-    </Provider>
+    <BrowserRouter>
+      <Provider store={store}>
+        <DepProvider service={service}>
+          {/* <App /> */}
+          {/* <Loginview /> */}
+          {/* <RegisterView /> */}
+          <AppRouter />
+        </DepProvider>
+      </Provider>
+    </BrowserRouter>
   </React.StrictMode>
 );
 

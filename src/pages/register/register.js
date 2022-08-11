@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useDep } from "../../shared/context/context.dep";
 import { inputEmailValidator, inputLenValidator, inputPhoneValidator } from "../../utils/util.validation";
 
 const Register = _ => {
    const { authService } = useDep();
+   const navigate = useNavigate();
 
    const [newUser, setNewUser] = useState({
       userName: '',
@@ -106,6 +108,11 @@ const Register = _ => {
       }
    }
 
+   const toLogin = e => {
+      e.preventDefault();
+      navigate('/auth/login', { replace: false });
+   };
+
    return ({
       userName: newUser.userName,
       userPassword: newUser.userPassword,
@@ -119,7 +126,8 @@ const Register = _ => {
       phoneErr: formErr.mobilePhoneNoErr,
       userErr: formErr.userNameErr,
       passErr: formErr.userPasswordErr,
-      emailErr: formErr.emailErr
+      emailErr: formErr.emailErr,
+      toLogin
    })
 }
 

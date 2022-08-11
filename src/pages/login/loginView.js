@@ -1,4 +1,5 @@
 import { Card, Form } from "react-bootstrap";
+import AppRouter from "../../apps/router";
 import { ButtonComp, ButtonCompVal } from "../../shared/components/component.button";
 import { FormInputPasswordVal } from "../../shared/components/component.inputPassword";
 import { FormInputTextVal } from "../../shared/components/component.inputText";
@@ -7,7 +8,7 @@ import Login from "./login";
 import "./loginView.css";
 
 const Loginview = _ => {
-   const { userName, onChange, userPassword, onSubmit, isLoading, userErr, passErr } = Login();
+   const { userName, onChange, userPassword, onSubmit, isLoading, userErr, passErr, toRegister } = Login();
    let isDisable = (userName === '' || userPassword === '' || userErr !== '' || passErr !== '');
    return (
       <div className="login-page">
@@ -22,11 +23,12 @@ const Loginview = _ => {
                   <div className="mt-4 text-center">
                      <span>Don't have account?</span>
                   </div>
-                  <ButtonComp variant="success" label="Create New Account" addStyle="w-100 mb-3" />
+                  <ButtonComp variant="success" label="Create New Account" addStyle="w-100 mb-3" onClick={toRegister} />
                </Form>
             </Card.Body>
          </Card>
          <ModalLoading show={isLoading} />
+         <AppRouter />
       </div>
    )
 }

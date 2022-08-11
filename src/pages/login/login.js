@@ -1,14 +1,14 @@
-import { useEffect, useRef, useState } from "react";
-import { useDispatch, useSelector } from "react-redux"
+import { useEffect, useState } from "react";
+import { useDispatch } from "react-redux"
+import { useNavigate } from "react-router-dom";
 import { useDep } from "../../shared/context/context.dep";
-import { authSelector } from "../../shared/selectors/selector.auth";
 import { inputLenValidator } from "../../utils/util.validation";
 import { userLoginAction } from "./state/auth.action";
 
 const Login = _ => {
-   const authRed = useSelector(authSelector);
    const dispatch = useDispatch();
    const { authService } = useDep();
+   const navigate = useNavigate();
 
    const [userCredential, setUserCredential] = useState({
       userName: '',
@@ -77,16 +77,24 @@ const Login = _ => {
             UserName: userCredential.userName,
             UserPassword: userCredential.userPassword
          });
-         dispatch(userLoginAction({
-            email: userCredential.userName,
-            token: response.data.token
-         }))
+         if (response.status == 200) {
+            dispatch(userLoginAction({
+               email: userCredential.userName,
+               token: response.data.data
+            }));
+            navigate('/home');
+         }
       } catch (err) {
          setErrMsg(err.response.data.response_message);
       } finally {
          setLoading(false);
       }
    }
+
+   const toRegister = e => {
+      e.preventDefault();
+      navigate('/auth/register', { replace: false });
+   };
 
    return ({
       userName: userCredential.userName,
@@ -95,7 +103,8 @@ const Login = _ => {
       userErr: formErr.userNameErr,
       onChange,
       onSubmit,
-      isLoading
+      isLoading,
+      toRegister
    })
 }
 
