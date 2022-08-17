@@ -85,6 +85,7 @@ const Login = _ => {
             navigate('/home');
          }
       } catch (err) {
+         console.log(err);
          setErrMsg(err.response.data.response_message);
       } finally {
          setLoading(false);

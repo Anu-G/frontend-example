@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDep } from "../../shared/context/context.dep";
-import { inputEmailValidator, inputLenValidator, inputPhoneValidator } from "../../utils/util.validation";
+import { allowedCommand, allowedKey, allowedNavigation, allowPlus, inputEmailValidator, inputLenValidator, inputPhoneValidator } from "../../utils/util.validation";
 
 const Register = _ => {
    const { authService } = useDep();
@@ -19,7 +19,8 @@ const Register = _ => {
       userPasswordErr: '',
       mobilePhoneNoErr: '',
       emailErr: ''
-   })
+   });
+   const [isSuccess, setSuccess] = useState(false);
    const [isLoading, setLoading] = useState(false);
    const [errMsg, setErrMsg] = useState('');
 
@@ -66,7 +67,19 @@ const Register = _ => {
             emailErr: ''
          }));
       }
-   }, [newUser.userPassword, newUser.userName, newUser.email])
+
+      if (!inputPhoneValidator(newUser.mobilePhoneNo) && newUser.mobilePhoneNo !== '') {
+         setFormErr(prevState => ({
+            ...prevState,
+            mobilePhoneNoErr: 'invalid phone number!'
+         }));
+      } else {
+         setFormErr(prevState => ({
+            ...prevState,
+            mobilePhoneNoErr: ''
+         }));
+      }
+   }, [newUser.userPassword, newUser.userName, newUser.email, newUser.mobilePhoneNo])
 
    const onChange = (key, val) => {
       setNewUser(prevState => ({
@@ -75,37 +88,40 @@ const Register = _ => {
       }));
    }
 
-   const onSubmit = async e => {
-      e.preventDefault();
-      setLoading(true);
-      try {
-         const response = await authService.doRegister({
-            user_name: newUser.userName,
-            user_password: newUser.userPassword,
-            customer_name: newUser.customerName,
-            mobile_phone_no: newUser.mobilePhoneNo,
-            email: newUser.email
-         })
-      } catch (err) {
-         setErrMsg(err.response.data.response_message);
-      } finally {
-         setLoading(false);
-      }
-   }
-
    const onPhoneNumber = e => {
-      if (inputPhoneValidator(e.key) || e.keyCode === 8) {
-         setFormErr(prevState => ({
-            ...prevState,
-            mobilePhoneNoErr: ''
-         }));
-      } else {
+      if (!inputPhoneValidator(e.key) && !allowedKey.includes(e.keyCode) && !allowedCommand(e) && !allowedNavigation(e) && !allowPlus(e)) {
          setFormErr(prevState => ({
             ...prevState,
             mobilePhoneNoErr: 'input invalid!'
          }));
          e.preventDefault();
       }
+   }
+
+   const onSubmit = async e => {
+      e.preventDefault();
+      // setLoading(true);
+      setSuccess(true)
+      // try {
+      //    const response = await authService.doRegister({
+      //       user_name: newUser.userName,
+      //       user_password: newUser.userPassword,
+      //       customer_name: newUser.customerName,
+      //       mobile_phone_no: newUser.mobilePhoneNo,
+      //       email: newUser.email
+      //    });
+      //    if (response.status === 200) {
+      //       setSuccess(true);
+      //    }
+      // } catch (err) {
+      //    setErrMsg(err.response.data.response_message);
+      // } finally {
+      //    setLoading(false);
+      // }
+   }
+
+   const popUpHandle = _ => {
+      setSuccess(!isSuccess);
    }
 
    const toLogin = e => {
@@ -119,14 +135,16 @@ const Register = _ => {
       customerName: newUser.customerName,
       mobilePhoneNo: newUser.mobilePhoneNo,
       email: newUser.email,
-      isLoading,
-      onChange,
-      onSubmit,
-      onPhoneNumber,
       phoneErr: formErr.mobilePhoneNoErr,
       userErr: formErr.userNameErr,
       passErr: formErr.userPasswordErr,
       emailErr: formErr.emailErr,
+      isLoading,
+      onChange,
+      onSubmit,
+      onPhoneNumber,
+      isSuccess,
+      popUpHandle,
       toLogin
    })
 }

@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { userLogoutAction } from "./pages/login/state/auth.action";
 import { ModalLoading } from "./shared/components/modalLoading/component.modalLoading";
+import MenuDashboardView from "./pages/menuManager/manager.menuView";
 
 const Apps = _ => {
    const navigate = useNavigate();
@@ -54,6 +55,7 @@ const Apps = _ => {
                </Navbar.Collapse>
             </Container>
          </Navbar>
+         <MenuDashboardView />
          <div>
             <Outlet />
          </div>

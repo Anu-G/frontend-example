@@ -20,7 +20,7 @@
 
 .tooltip-area .buttontip {
    visibility: hidden;
-   width: auto;
+   width: max-content;
    background-color: #dc3545  ;
    color: #fff;
    text-align: center;
